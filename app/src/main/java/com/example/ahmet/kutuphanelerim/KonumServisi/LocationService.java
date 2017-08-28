@@ -19,8 +19,10 @@ import android.util.Log;
  */
 
 public class LocationService extends Service {
-    private  static Location locationGPS;
-    private  static Location locationNETWROK;
+    private   Location locationGPS;
+    private   Location locationNETWROK;
+    private LocationManager locationManager;
+    private LocationManager locationManagerNetwork;
     private long zaman = 1000 * 6;
 
     @Nullable
@@ -40,7 +42,7 @@ public class LocationService extends Service {
         if (ActivityCompat.checkSelfPermission(LocationService.this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(LocationService.this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
             return;
         }
-        final LocationManager locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
+        locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
         locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, zaman, 0, new LocationListener() {
             @Override
             public void onLocationChanged(Location location) {
@@ -71,7 +73,7 @@ public class LocationService extends Service {
         if (ActivityCompat.checkSelfPermission(LocationService.this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(LocationService.this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
             return;
         }
-        final LocationManager locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
+         locationManagerNetwork = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
         locationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, zaman, 0, new LocationListener() {
             @Override
             public void onLocationChanged(Location location) {
@@ -105,7 +107,7 @@ public class LocationService extends Service {
         // The service is starting, due to a call to startService()
         return Service.START_STICKY;
     }
-    private static Location getLocation(){
+    private  Location getLocation(){
         Location location = null;
         if(locationGPS != null){
             location = locationGPS;
@@ -117,18 +119,26 @@ public class LocationService extends Service {
      return location;
     }
 
-    public static  double getLatitude(){
+    public   double getLatitude(){
         Location location = getLocation();
         if(location != null){
             return location.getLatitude();
         }
         return 0;
     }
-    public static  double getLongitude(){
+    public   double getLongitude(){
         Location location = getLocation();
         if(location != null){
             return location.getLongitude();
         }
         return 0;
     }
+
+    public  void StopService(){
+        stopService(new Intent(this,LocationService.class));
+        locationManager.removeUpdates((LocationListener)this);
+        locationManagerNetwork.removeUpdates((LocationListener)this);
+    }
+
+
 }

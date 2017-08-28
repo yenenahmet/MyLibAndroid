@@ -5,12 +5,16 @@ import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.Bitmap;
 import android.location.LocationManager;
 import android.preference.PreferenceManager;
+import android.util.Base64;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.Toast;
+
+import java.io.ByteArrayOutputStream;
 
 /**
  * Created by Ahmet on 23.08.2017.
@@ -18,13 +22,12 @@ import android.widget.Toast;
 
 public class Statics {
     public static boolean isTelNoDigit(String NO){
-        boolean durum = true;
         for(int i=0 ; i<11;i++){
             if(!Character.isDigit(NO.charAt(i))){
-                durum= false;
+                return false;
             }
         }
-        return durum;
+        return true;
     }
     public static boolean isGPSEnabled(Context context) {
         LocationManager manager = (LocationManager) context.getSystemService(Context.LOCATION_SERVICE);
@@ -56,8 +59,12 @@ public class Statics {
         context.startActivity(intent);
         ((Activity) context).finish();
     }
-    public static String toEditTrim(EditText veri){ // Edittexti Ayarla
-        return veri.getText().toString().trim();
+    public static void NewActivity(Context context,Class classs){
+        Intent intent = new Intent(context,classs);
+        context.startActivity(intent);
+    }
+    public static boolean isEditText(EditText editText){ // Edittexti Ayarla
+        return editText.getText().toString().trim().isEmpty();
     }
     public static void Toast(Context context,String veri){
         Toast.makeText(context,veri,Toast.LENGTH_SHORT).show();
@@ -66,7 +73,29 @@ public class Statics {
     public static String getPrefString(Context context,String veri){
         return PreferenceManager.getDefaultSharedPreferences(context).getString(veri,"");
     }
+    public static int getPrefInt(Context context,String veri){
+        return PreferenceManager.getDefaultSharedPreferences(context).getInt(veri,0);
+    }
     public static SharedPreferences.Editor getEditor(Context context){
         return PreferenceManager.getDefaultSharedPreferences(context).edit();
     }
+
+    public static String BitmapConvertString(Bitmap bitmap){
+        ByteArrayOutputStream baos = new ByteArrayOutputStream();
+        bitmap.compress(Bitmap.CompressFormat.PNG,100,baos);
+        byte[] imageBytes = baos.toByteArray();
+        return Base64.encodeToString(imageBytes, Base64.DEFAULT);
+    }
+
+    public static void ScreenBarClear(Activity context){
+        View decorView = context.getWindow().getDecorView();
+        decorView.setSystemUiVisibility(
+                View.SYSTEM_UI_FLAG_LAYOUT_STABLE
+                        | View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
+                        | View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
+                        | View.SYSTEM_UI_FLAG_HIDE_NAVIGATION
+                        | View.SYSTEM_UI_FLAG_FULLSCREEN
+                        | View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY);
+    }
+
 }

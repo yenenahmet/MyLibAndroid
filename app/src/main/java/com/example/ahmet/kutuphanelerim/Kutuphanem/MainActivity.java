@@ -8,7 +8,7 @@ import android.os.Bundle;
 
 import com.example.ahmet.kutuphanelerim.KonumServisi.LocationService;
 import com.example.ahmet.kutuphanelerim.R;
-import com.example.ahmet.kutuphanelerim.RetrofitGeneric.RetrofitPost;
+import com.example.ahmet.kutuphanelerim.Retrofit.RetrofitGeneric.RetrofitPost;
 import com.example.ahmet.kutuphanelerim.Static.Statics;
 
 public class MainActivity extends AppCompatActivity {
