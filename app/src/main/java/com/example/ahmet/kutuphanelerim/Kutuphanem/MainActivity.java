@@ -10,6 +10,7 @@ import com.example.ahmet.kutuphanelerim.KonumServisi.LocationService;
 import com.example.ahmet.kutuphanelerim.R;
 import com.example.ahmet.kutuphanelerim.Retrofit.RetrofitGeneric.RetrofitPost;
 import com.example.ahmet.kutuphanelerim.Static.Statics;
+import com.example.ahmet.kutuphanelerim.WebSocket.EchoWebSocketListener;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -34,4 +35,6 @@ public class MainActivity extends AppCompatActivity {
         super.onStart();
         startService(new Intent(getApplicationContext(), LocationService.class));
     }
+
+
 }
